@@ -24,6 +24,11 @@ class Product extends Model
 		return $this->hasMany('App\Models\ProductSize');
 	}
 
+	public function photos()
+	{
+		return $this->hasMany('App\Models\ProductPhoto');
+	}
+
 	public function colors()
 	{
 		return $this->hasMany('App\Models\ProductColor');
@@ -32,5 +37,21 @@ class Product extends Model
     public function wishlist()
     {
         return $this->belongsToMany('App\Models\User', 'wishlists');
+    }
+
+    public function getColorsList()
+    {
+    	$colors = $this->colors();
+    	$colorsList = [];
+
+    	if(empty($colors)) {
+    		return [];
+    	}
+
+    	foreach($colors as $color) {
+    		$colorsList[] = $color['color'];
+    	}
+
+    	return $colorsList;
     }
 }
