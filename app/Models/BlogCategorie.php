@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class BlogCategorie extends Model
 {
-	protected $fillable = ['title'];
+	protected $fillable = ['title', 'alias'];
 
 	public function posts()
 	{

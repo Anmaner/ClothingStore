@@ -14,6 +14,6 @@
 
 Route::get('/', 'IndexController@index');
 
-Route::get('shopping/{category?}', 'ShoppingController@category')->middleware('CorrectCategory')->name('shopping');
+Route::get('shopping/{category?}', 'ShoppingController@category')->middleware('CorrectCategory:shopping')->name('shopping');
 
-Route::get('blog/{category?}', 'BlogController@category')->name('blog');
+Route::get('blog/{category?}', 'BlogController@category')->middleware('CorrectCategory:blog')->name('blog');
