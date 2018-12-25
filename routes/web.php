@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+
+Route::get('/', 'IndexController@index');
+
+Route::get('shopping/{category?}', 'ShopController@category')->middleware('CorrectCategory')->name('shopping');
+
+Route::get('blog/{category?}', 'BlogController@category')->name('blog');

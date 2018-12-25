@@ -268,15 +268,90 @@
     
     /*==================================================================
     [ Show modal1 ]*/
+
+    // for(i = 1; i <= 1; i++) 
+    // {
+    //     var index = i;
+
+    //     $('.js-show-modal'+i).on('click',function(e){
+    //         e.preventDefault();
+    //         $('.js-modal'+index).addClass('show-modal1');
+    //     });
+
+    //     $('.js-hide-modal'+i).on('click',function(){
+    //         $('.js-modal'+index).removeClass('show-modal1');
+    //     });
+    // }
+
     $('.js-show-modal1').on('click',function(e){
         e.preventDefault();
         $('.js-modal1').addClass('show-modal1');
     });
-
     $('.js-hide-modal1').on('click',function(){
         $('.js-modal1').removeClass('show-modal1');
     });
 
+    $('.js-show-modal2').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal2').addClass('show-modal1');
+    });
+    $('.js-hide-modal2').on('click',function(){
+        $('.js-modal2').removeClass('show-modal1');
+    });
+
+
+    $('.js-show-modal3').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal3').addClass('show-modal1');
+    });
+    $('.js-hide-modal3').on('click',function(){
+        $('.js-modal3').removeClass('show-modal1');
+    });
+
+
+    $('.js-show-modal4').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal4').addClass('show-modal1');
+    });
+    $('.js-hide-modal4').on('click',function(){
+        $('.js-modal4').removeClass('show-modal1');
+    });
+
+
+    $('.js-show-modal5').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal5').addClass('show-modal1');
+    });
+    $('.js-hide-modal5').on('click',function(){
+        $('.js-modal5').removeClass('show-modal1');
+    });
+
+
+    $('.js-show-modal6').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal6').addClass('show-modal1');
+    });
+    $('.js-hide-modal6').on('click',function(){
+        $('.js-modal6').removeClass('show-modal1');
+    });
+
+
+    $('.js-show-modal7').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal7').addClass('show-modal1');
+    });
+    $('.js-hide-modal7').on('click',function(){
+        $('.js-modal7').removeClass('show-modal1');
+    });
+
+
+    $('.js-show-modal8').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal8').addClass('show-modal1');
+    });
+    $('.js-hide-modal8').on('click',function(){
+        $('.js-modal8').removeClass('show-modal1');
+    });
 
 
 })(jQuery);
