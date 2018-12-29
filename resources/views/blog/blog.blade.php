@@ -3,7 +3,7 @@
 @section('content')
 
 <!-- Title page -->
-<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('images/bg-02.jpg');">
+<section class="bg-img1 txt-center p-lr-15 p-tb-92" style="background-image: url('/images/bg-02.jpg');">
 	<h2 class="ltext-105 cl0 txt-center">
 		Blog
 	</h2>
@@ -20,7 +20,7 @@
 					@foreach($posts as $post)
 					<div class="p-b-63">
 						<a href="blog-detail.html" class="hov-img0 how-pos5-parent">
-							<img src="images/{{ $post->img }}" alt="IMG-BLOG">
+							<img src="/images/{{ $post->img }}" alt="IMG-BLOG">
 
 							<div class="flex-col-c-m size-123 bg9 how-pos5">
 								<span class="ltext-107 cl2 txt-center">
@@ -50,8 +50,10 @@
 									</span>
 
 									<span>
-										StreetStyle, Fashion, Couple  
-										<span class="cl12 m-l-4 m-r-6">|</span>
+										@if($post->tags()->get()->toArray())
+											{{ implode(', ', simplify_array($post, 'title', 'tags')) }}
+											<span class="cl12 m-l-4 m-r-6">  |</span>
+										@endif
 									</span>
 
 									<span>
@@ -98,7 +100,7 @@
 						<ul>
 							@foreach($categories as $categorie)
 							<li class="bor18">
-								<a href="{{ route('blog', $categorie->alias) }}" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
+								<a href="{{ route('blog', $categorie->alias) }}" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4 hov-butt {{ isset($catTitle) && $categorie->alias == $catTitle ? 'how-active2' : '' }}">
 									{{ $categorie->title }}
 								</a>
 							</li>
@@ -115,7 +117,7 @@
 							@foreach($products as $prod)
 							<li class="flex-w flex-t p-b-30">
 								<a href="#" class="wrao-pic-w size-214 hov-ovelay1 m-r-20">
-									<img src="images/{{ isset($prod->photos[0])?$prod->photos[0]->photo:'default-photo.png' }}" alt="PRODUCT" width="90" height="110">
+									<img src="/images/{{ isset($prod->photos[0])?$prod->photos[0]->photo:'default-photo.png' }}" alt="PRODUCT" width="90" height="110">
 								</a>
 
 								<div class="size-215 flex-col-t p-t-8">
@@ -242,25 +244,11 @@
 						</h4>
 
 						<div class="flex-w m-r--5">
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Fashion
+							@foreach($tags as $tag)
+							<a href="{{ route('blog.search.tags', $tag->title) }}" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5 title {{ isset($curTag) && $tag->title == $curTag ? 'tag-active' : '' }}">
+								{{ $tag->title }}
 							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Lifestyle
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Denim
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Streetstyle
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Crafts
-							</a>
+							@endforeach
 						</div>
 					</div>
 				</div>
@@ -274,14 +262,14 @@
 
 @section('scripts')
 <!--===============================================================================================-->	
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
-	<script src="vendor/animsition/js/animsition.min.js"></script>
+	<script src="/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-	<script src="vendor/bootstrap/js/popper.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="vendor/select2/select2.min.js"></script>
+	<script src="/vendor/select2/select2.min.js"></script>
 	<script>
 		$(".js-select2").each(function(){
 			$(this).select2({
@@ -291,9 +279,9 @@
 		})
 	</script>
 <!--===============================================================================================-->
-	<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 <!--===============================================================================================-->
-	<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script>
 		$('.js-pscroll').each(function(){
 			$(this).css('position','relative');

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Post extends Model
 {
-	protected $fillable = ['title', 'text', 'img', 'intro', 'tags'];
+	protected $fillable = ['title', 'text', 'img', 'intro'];
 
 
 	public function categorie()
@@ -22,5 +22,10 @@ class Post extends Model
 	public function comments()
 	{
 		return $this->hasMany('App\Models\Comment');
+	}
+
+	public function tags()
+	{
+		return $this->belongsToMany('App\Models\Tag');
 	}
 }

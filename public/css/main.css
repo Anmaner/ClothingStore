@@ -3330,3 +3330,31 @@ input.num-product::-webkit-inner-spin-button {
   }
 
 }
+
+
+/*---------------------------------------------*/
+
+
+.how-active2 {
+  color: #333;
+  text-decoration: underline;
+}
+
+.how-active2:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+.hov-butt:hover {
+  color: #333;
+  text-decoration: underline;
+}
+
+.title {
+  text-transform: capitalize;
+}
+
+.tag-active {
+  color: #717fe0;
+  border-color: #717fe0;
+}
