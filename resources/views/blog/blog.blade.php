@@ -19,7 +19,7 @@
 					<!-- item blog -->
 					@foreach($posts as $post)
 					<div class="p-b-63">
-						<a href="blog-detail.html" class="hov-img0 how-pos5-parent">
+						<a href="{{ route('post', $post->alias) }}" class="hov-img0 how-pos5-parent">
 							<img src="/images/{{ $post->img }}" alt="IMG-BLOG">
 
 							<div class="flex-col-c-m size-123 bg9 how-pos5">
@@ -35,7 +35,7 @@
 
 						<div class="p-t-32">
 							<h4 class="p-b-15">
-								<a href="blog-detail.html" class="ltext-108 cl2 hov-cl1 trans-04">
+								<a href="{{ route('post', $post->alias) }}" class="ltext-108 cl2 hov-cl1 trans-04">
 									{{ $post->title }}
 								</a>
 							</h4>
@@ -67,7 +67,7 @@
 									</span>
 								</span>
 
-								<a href="blog-detail.html" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
+								<a href="{{ route('post', $post->alias) }}" class="stext-101 cl2 hov-cl1 trans-04 m-tb-10">
 									Continue Reading
 
 									<i class="fa fa-long-arrow-right m-l-9"></i>

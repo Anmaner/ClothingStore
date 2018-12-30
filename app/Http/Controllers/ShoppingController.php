@@ -15,4 +15,12 @@ class ShoppingController extends Controller
 
 		return view('shop.product', compact('products', 'categories', 'catTitle'));
 	}
+
+	public function product(Request $request, ProductCategorie $prodCat, Product $product, $alias)
+	{
+		$data = $product->where('alias', $alias)->first();
+		$categories = $prodCat->all();
+
+		return view('shop.product_detail', compact('data', 'categories'));
+	}
 }
