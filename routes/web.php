@@ -20,4 +20,11 @@ Route::get('blog/{category?}', 'BlogController@category')->middleware('CorrectCa
 
 Route::group(['prefix' => 'blog-search'], function() {
 	Route::get('tags/{curTag}', 'BlogSearchController@tags')->middleware('CorrectSearch:tags')->name('blog.search.tags');
+	Route::get('archive/{date}', 'BlogSearchController@archive')->middleware('CorrectSearch:archive')->name('blog.search.archive');
 });
+
+
+Route::get('blog-post/{alias}', 'BlogController@post')->name('post');
+Route::put('blog-comment', 'BlogController@comment')->name('blog.comment');
+
+Auth::routes();

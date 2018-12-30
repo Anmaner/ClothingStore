@@ -19,4 +19,9 @@ class BlogSearchController extends Controller
 
 		return view('blog.blog', compact('categories', 'posts', 'tags', 'products', 'curTag'));
 	}
+
+	public function archive($date)
+	{
+		return $date;
+	}
 }

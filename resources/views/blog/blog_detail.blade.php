@@ -5,12 +5,12 @@
 <!-- breadcrumb -->
 <div class="container">
 	<div class="bread-crumb flex-w p-l-25 p-r-15 p-t-30 p-lr-0-lg">
-		<a href="index.html" class="stext-109 cl8 hov-cl1 trans-04">
+		<a href="/index.html" class="stext-109 cl8 hov-cl1 trans-04">
 			Home
 			<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 		</a>
 
-		<a href="blog.html" class="stext-109 cl8 hov-cl1 trans-04">
+		<a href="/blog.html" class="stext-109 cl8 hov-cl1 trans-04">
 			Blog
 			<i class="fa fa-angle-right m-l-9 m-r-10" aria-hidden="true"></i>
 		</a>
@@ -30,7 +30,7 @@
 				<div class="p-r-45 p-r-0-lg">
 					<!--  -->
 					<div class="wrap-pic-w how-pos5-parent">
-						<img src="images/blog-04.jpg" alt="IMG-BLOG">
+						<img src="/images/blog-04.jpg" alt="IMG-BLOG">
 
 						<div class="flex-col-c-m size-123 bg9 how-pos5">
 							<span class="ltext-107 cl2 txt-center">
@@ -46,7 +46,7 @@
 					<div class="p-t-32">
 						<span class="flex-w flex-m stext-111 cl2 p-b-19">
 							<span>
-								<span class="cl4">By</span> Admin  
+								<span class="cl4">By</span> {{ $data->user->name }}  
 								<span class="cl12 m-l-4 m-r-6">|</span>
 							</span>
 
@@ -56,43 +56,45 @@
 							</span>
 
 							<span>
-								StreetStyle, Fashion, Couple  
-								<span class="cl12 m-l-4 m-r-6">|</span>
+								@if($data->tags()->get()->toArray())
+									{{ implode(', ', simplify_array($data, 'title', 'tags')) }}
+									<span class="cl12 m-l-4 m-r-6">  |</span>
+								@endif
 							</span>
 
 							<span>
-								8 Comments
+								@if(count($data->comments) > 1)
+									{{ count($data->comments).' Comments' }}
+								@elseif(count($data->comments) === 1)
+									1 Comment
+								@elseif(count($data->comments) === 0)
+									No comments
+								@endif
 							</span>
 						</span>
 
 						<h4 class="ltext-109 cl2 p-b-28">
-							8 Inspiring Ways to Wear Dresses in the Winter
+							{{ $data->title }}
 						</h4>
 
-						<p class="stext-117 cl6 p-b-26">
-							Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet est vel orci luctus sollicitudin. Duis eleifend vestibulum justo, varius semper lacus condimentum dictum. Donec pulvinar a magna ut malesuada. In posuere felis diam, vel sodales metus accumsan in. Duis viverra dui eu pharetra pellentesque. Donec a eros leo. Quisque sed ligula vitae lorem efficitur faucibus. Praesent sit amet imperdiet ante. Nulla id tellus auctor, dictum libero a, malesuada nisi. Nulla in porta nibh, id vestibulum ipsum. Praesent dapibus tempus erat quis aliquet. Donec ac purus id sapien condimentum feugiat.
-						</p>
-
-						<p class="stext-117 cl6 p-b-26">
-							Praesent vel mi bibendum, finibus leo ac, condimentum arcu. Pellentesque sem ex, tristique sit amet suscipit in, mattis imperdiet enim. Integer tempus justo nec velit fringilla, eget eleifend neque blandit. Sed tempor magna sed congue auctor. Mauris eu turpis eget tortor ultricies elementum. Phasellus vel placerat orci, a venenatis justo. Phasellus faucibus venenatis nisl vitae vestibulum. Praesent id nibh arcu. Vivamus sagittis accumsan felis, quis vulputate
-						</p>
+						<p class="stext-117 cl6 p-b-26">{{ $data->text }}</p>
 					</div>
 
+					@if($data->tags()->get()->toArray())
 					<div class="flex-w flex-t p-t-16">
 						<span class="size-216 stext-116 cl8 p-t-4">
 							Tags
 						</span>
 
 						<div class="flex-w size-217">
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Streetstyle
+							@foreach($data->tags as $tag)
+							<a href="{{ route('blog.search.tags', $tag->title) }}" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
+								{{ $tag->title }}
 							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Crafts
-							</a>
+							@endforeach
 						</div>
 					</div>
+					@endif
 
 					<!--  -->
 					<div class="p-t-40">
@@ -101,14 +103,15 @@
 						</h5>
 
 						<p class="stext-107 cl6 p-b-40">
-							Your email address will not be published. Required fields are marked *
+							Your email address will not be published.
 						</p>
 
-						<form>
+						<form action="{{ route('blog.comment') }}" method="POST">
 							<div class="bor19 m-b-20">
-								<textarea class="stext-111 cl2 plh3 size-124 p-lr-18 p-tb-15" name="cmt" placeholder="Comment..."></textarea>
+								<textarea class="stext-111 cl2 plh3 size-124 p-lr-18 p-tb-15" name="text" placeholder="Comment..."></textarea>
 							</div>
 
+							@if(!Auth::check())
 							<div class="bor19 size-218 m-b-20">
 								<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text" name="name" placeholder="Name *">
 							</div>
@@ -116,14 +119,17 @@
 							<div class="bor19 size-218 m-b-20">
 								<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text" name="email" placeholder="Email *">
 							</div>
+							@endif
 
-							<div class="bor19 size-218 m-b-30">
-								<input class="stext-111 cl2 plh3 size-116 p-lr-18" type="text" name="web" placeholder="Website">
-							</div>
+							<input type="hidden" name="post_id" value="{{ $data->id }}">
+							<input type="hidden" name="post_title" value="{{ $data->title }}">
 
 							<button class="flex-c-m stext-101 cl0 size-125 bg3 bor2 hov-btn3 p-lr-15 trans-04">
 								Post Comment
 							</button>
+
+							{{ csrf_field() }}
+							{{ method_field('PUT') }}
 						</form>
 					</div>
 				</div>
@@ -145,35 +151,13 @@
 						</h4>
 
 						<ul>
+							@foreach($categories as $categorie)
 							<li class="bor18">
-								<a href="#" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
-									Fashion
+								<a href="{{ route('blog', $categorie->alias) }}" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4 hov-butt {{ isset($catTitle) && $categorie->alias == $catTitle ? 'how-active2' : '' }}">
+									{{ $categorie->title }}
 								</a>
 							</li>
-
-							<li class="bor18">
-								<a href="#" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
-									Beauty
-								</a>
-							</li>
-
-							<li class="bor18">
-								<a href="#" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
-									Street Style
-								</a>
-							</li>
-
-							<li class="bor18">
-								<a href="#" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
-									Life Style
-								</a>
-							</li>
-
-							<li class="bor18">
-								<a href="#" class="dis-block stext-115 cl6 hov-cl1 trans-04 p-tb-8 p-lr-4">
-									DIY & Crafts
-								</a>
-							</li>
+							@endforeach
 						</ul>
 					</div>
 
@@ -183,53 +167,23 @@
 						</h4>
 
 						<ul>
+							@foreach($products as $prod)
 							<li class="flex-w flex-t p-b-30">
 								<a href="#" class="wrao-pic-w size-214 hov-ovelay1 m-r-20">
-									<img src="images/product-min-01.jpg" alt="PRODUCT">
+									<img src="/images/{{ isset($prod->photos[0])?$prod->photos[0]->photo:'default-photo.png' }}" alt="PRODUCT" width="90" height="110">
 								</a>
 
 								<div class="size-215 flex-col-t p-t-8">
 									<a href="#" class="stext-116 cl8 hov-cl1 trans-04">
-										White Shirt With Pleat Detail Back
+										{{ $prod->title }}
 									</a>
 
 									<span class="stext-116 cl6 p-t-20">
-										$19.00
+										${{ $prod->price }}.00
 									</span>
 								</div>
 							</li>
-
-							<li class="flex-w flex-t p-b-30">
-								<a href="#" class="wrao-pic-w size-214 hov-ovelay1 m-r-20">
-									<img src="images/product-min-02.jpg" alt="PRODUCT">
-								</a>
-
-								<div class="size-215 flex-col-t p-t-8">
-									<a href="#" class="stext-116 cl8 hov-cl1 trans-04">
-										Converse All Star Hi Black Canvas
-									</a>
-
-									<span class="stext-116 cl6 p-t-20">
-										$39.00
-									</span>
-								</div>
-							</li>
-
-							<li class="flex-w flex-t p-b-30">
-								<a href="#" class="wrao-pic-w size-214 hov-ovelay1 m-r-20">
-									<img src="images/product-min-03.jpg" alt="PRODUCT">
-								</a>
-
-								<div class="size-215 flex-col-t p-t-8">
-									<a href="#" class="stext-116 cl8 hov-cl1 trans-04">
-										Nixon Porter Leather Watch In Tan
-									</a>
-
-									<span class="stext-116 cl6 p-t-20">
-										$17.00
-									</span>
-								</div>
-							</li>
+							@endforeach
 						</ul>
 					</div>
 
@@ -343,25 +297,11 @@
 						</h4>
 
 						<div class="flex-w m-r--5">
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Fashion
+							@foreach($tags as $tag)
+							<a href="{{ route('blog.search.tags', $tag->title) }}" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5 title {{ isset($curTag) && $tag->title == $curTag ? 'tag-active' : '' }}">
+								{{ $tag->title }}
 							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Lifestyle
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Denim
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Streetstyle
-							</a>
-
-							<a href="#" class="flex-c-m stext-107 cl6 size-301 bor7 p-lr-15 hov-tag1 trans-04 m-r-5 m-b-5">
-								Crafts
-							</a>
+							@endforeach
 						</div>
 					</div>
 				</div>
@@ -376,14 +316,14 @@
 @section('scripts')
 
 <!--===============================================================================================-->	
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+	<script src="/vendor/jquery/jquery-3.2.1.min.js"></script>
 <!--===============================================================================================-->
-	<script src="vendor/animsition/js/animsition.min.js"></script>
+	<script src="/vendor/animsition/js/animsition.min.js"></script>
 <!--===============================================================================================-->
-	<script src="vendor/bootstrap/js/popper.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+	<script src="/vendor/bootstrap/js/popper.js"></script>
+	<script src="/vendor/bootstrap/js/bootstrap.min.js"></script>
 <!--===============================================================================================-->
-	<script src="vendor/select2/select2.min.js"></script>
+	<script src="/vendor/select2/select2.min.js"></script>
 	<script>
 		$(".js-select2").each(function(){
 			$(this).select2({
@@ -393,9 +333,9 @@
 		})
 	</script>
 <!--===============================================================================================-->
-	<script src="vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
+	<script src="/vendor/MagnificPopup/jquery.magnific-popup.min.js"></script>
 <!--===============================================================================================-->
-	<script src="vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+	<script src="/vendor/perfect-scrollbar/perfect-scrollbar.min.js"></script>
 	<script>
 		$('.js-pscroll').each(function(){
 			$(this).css('position','relative');
