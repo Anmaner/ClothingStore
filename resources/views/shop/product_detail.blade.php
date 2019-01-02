@@ -259,7 +259,8 @@
 									@endforeach
 									
 									<!-- Add review -->
-									<form class="w-full">
+									@if(!$userHasReviews)
+									<form class="w-full" method="POST" action="{{ route('product.review') }}">
 										<h5 class="mtext-108 cl2 p-b-7">
 											Add a review
 										</h5>
@@ -286,9 +287,10 @@
 										<div class="row p-b-25">
 											<div class="col-12 p-b-5">
 												<label class="stext-102 cl3" for="review">Your review</label>
-												<textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="review" name="review"></textarea>
+												<textarea class="size-110 bor8 stext-102 cl2 p-lr-20 p-tb-10" id="review" name="text"></textarea>
 											</div>
 
+											@if(!Auth::check())
 											<div class="col-sm-6 p-b-5">
 												<label class="stext-102 cl3" for="name">Name</label>
 												<input class="size-111 bor8 stext-102 cl2 p-lr-20" id="name" type="text" name="name">
@@ -298,12 +300,20 @@
 												<label class="stext-102 cl3" for="email">Email</label>
 												<input class="size-111 bor8 stext-102 cl2 p-lr-20" id="email" type="text" name="email">
 											</div>
+											@endif
 										</div>
+
+										<input type="hidden" name="product_id" value="{{ $data->id }}">
+										<input type="hidden" name="product_alias" value="{{ $data->alias }}">
+
+										{{ csrf_field() }}
+										{{ method_field('PUT') }}
 
 										<button class="flex-c-m stext-101 cl0 size-112 bg7 bor11 hov-btn3 p-lr-15 trans-04 m-b-10">
 											Submit
 										</button>
 									</form>
+									@endif
 								</div>
 							</div>
 						</div>

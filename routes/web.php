@@ -16,6 +16,7 @@ Route::get('/', 'IndexController@index')->name('main');
 
 Route::get('shopping/{category?}', 'ShoppingController@category')->middleware('CorrectCategory:shopping')->name('shopping');
 Route::get('shopping/product/{alias}', 'ShoppingController@product')->name('product');
+Route::put('shopping/review', 'ShoppingController@review')->name('product.review');
 
 Route::get('blog/{category?}', 'BlogController@category')->middleware('CorrectCategory:blog')->name('blog');
 
