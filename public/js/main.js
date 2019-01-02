@@ -354,4 +354,22 @@
     });
 
 
+    $('.js-show-modal9').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal9').addClass('show-modal1');
+    });
+    $('.js-hide-modal9').on('click',function(){
+        $('.js-modal9').removeClass('show-modal1');
+    });
+
+
+    $('.js-show-modal10').on('click',function(e){
+        e.preventDefault();
+        $('.js-modal10').addClass('show-modal1');
+    });
+    $('.js-hide-modal10').on('click',function(){
+        $('.js-modal10').removeClass('show-modal1');
+    });
+
+
 })(jQuery);

@@ -13,35 +13,17 @@
 						<div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
 						<div class="slick3 gallery-lb">
-							<div class="item-slick3" data-thumb="images/product-detail-01.jpg">
+							@foreach($data->photos as $photo)
+							<div class="item-slick3" data-thumb="/images/{{ $photo->photo }}">
 								<div class="wrap-pic-w pos-relative">
-									<img src="/images/product-detail-01.jpg" alt="IMG-PRODUCT">
+									<img src="/images/{{ $photo->photo }}" alt="IMG-PRODUCT">
 
-									<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/images/product-detail-01.jpg">
+									<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/images/{{ $photo->photo }}">
 										<i class="fa fa-expand"></i>
 									</a>
 								</div>
 							</div>
-
-							<div class="item-slick3" data-thumb="images/product-detail-02.jpg">
-								<div class="wrap-pic-w pos-relative">
-									<img src="/images/product-detail-02.jpg" alt="IMG-PRODUCT">
-
-									<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/images/product-detail-02.jpg">
-										<i class="fa fa-expand"></i>
-									</a>
-								</div>
-							</div>
-
-							<div class="item-slick3" data-thumb="images/product-detail-03.jpg">
-								<div class="wrap-pic-w pos-relative">
-									<img src="/images/product-detail-03.jpg" alt="IMG-PRODUCT">
-
-									<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/images/product-detail-03.jpg">
-										<i class="fa fa-expand"></i>
-									</a>
-								</div>
-							</div>
+							@endforeach
 						</div>
 					</div>
 				</div>
@@ -158,7 +140,9 @@
 					</li>
 
 					<li class="nav-item p-b-10">
-						<a class="nav-link" data-toggle="tab" href="#reviews" role="tab">Reviews (1)</a>
+						<a class="nav-link" data-toggle="tab" href="#reviews" role="tab">
+							Reviews ({{ count($data->reviews) }})
+						</a>
 					</li>
 				</ul>
 
@@ -167,7 +151,7 @@
 					<!-- - -->
 					<div class="tab-pane fade show active" id="description" role="tabpanel">
 						<div class="how-pos2 p-lr-15-md">
-							<p class="stext-102 cl6">{{ $data->text }}</p>
+							<p class="stext-102 cl6">{{ $data->description }}</p>
 						</div>
 					</div>
 
@@ -176,6 +160,7 @@
 						<div class="row">
 							<div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
 								<ul class="p-lr-28 p-lr-15-sm">
+									@if($data->weight)
 									<li class="flex-w flex-t p-b-7">
 										<span class="stext-102 cl3 size-205">
 											Weight
@@ -185,7 +170,9 @@
 											{{ $data->weight }} kg
 										</span>
 									</li>
+									@endif
 
+									@if($data->dimensions)
 									<li class="flex-w flex-t p-b-7">
 										<span class="stext-102 cl3 size-205">
 											Dimensions
@@ -195,7 +182,9 @@
 											{{ $data->dimensions }}
 										</span>
 									</li>
+									@endif
 
+									@if($data->materials)
 									<li class="flex-w flex-t p-b-7">
 										<span class="stext-102 cl3 size-205">
 											Materials
@@ -205,26 +194,31 @@
 											{{ $data->materials }}
 										</span>
 									</li>
+									@endif
 
+									@if($data->colors()->get()->toArray())
 									<li class="flex-w flex-t p-b-7">
 										<span class="stext-102 cl3 size-205">
 											Color
 										</span>
 
 										<span class="stext-102 cl6 size-206">
-											Black, Blue, Grey, Green, Red, White
+											{{ implode(', ', simplify_array($data, 'color', 'colors')) }}
 										</span>
 									</li>
+									@endif
 
+									@if($data->sizes()->get()->toArray())
 									<li class="flex-w flex-t p-b-7">
 										<span class="stext-102 cl3 size-205">
 											Size
 										</span>
 
 										<span class="stext-102 cl6 size-206">
-											XL, L, M, S
+											{{ implode(', ', simplify_array($data, 'size', 'sizes')) }}
 										</span>
 									</li>
+									@endif
 								</ul>
 							</div>
 						</div>
@@ -236,31 +230,33 @@
 							<div class="col-sm-10 col-md-8 col-lg-6 m-lr-auto">
 								<div class="p-b-30 m-lr-15-sm">
 									<!-- Review -->
+									@foreach($data->reviews as $review)
 									<div class="flex-w flex-t p-b-68">
 										<div class="wrap-pic-s size-109 bor0 of-hidden m-r-18 m-t-6">
-											<img src="/images/avatar-01.jpg" alt="AVATAR">
+											<img src="/images/user.jpg" alt="AVATAR">
 										</div>
 
 										<div class="size-207">
 											<div class="flex-w flex-sb-m p-b-17">
 												<span class="mtext-107 cl2 p-r-20">
-													Ariana Grande
+													{{ $review->user_id ? $review->user->name : $review->name }}
 												</span>
 
 												<span class="fs-18 cl11">
+												@foreach(range(1, floor(round($review->rating*2)/2)) as $item)
 													<i class="zmdi zmdi-star"></i>
-													<i class="zmdi zmdi-star"></i>
-													<i class="zmdi zmdi-star"></i>
-													<i class="zmdi zmdi-star"></i>
+												@endforeach
+
+												@if( round($review->rating*2)/2 === (int)round($review->rating*2)/2 )
 													<i class="zmdi zmdi-star-half"></i>
+												@endif
 												</span>
 											</div>
 
-											<p class="stext-102 cl6">
-												Quod autem in homine praestantissimum atque optimum est, id deseruit. Apud ceteros autem philosophos
-											</p>
+											<p class="stext-102 cl6">{{ $review->text }}</p>
 										</div>
 									</div>
+									@endforeach
 									
 									<!-- Add review -->
 									<form class="w-full">
@@ -269,7 +265,7 @@
 										</h5>
 
 										<p class="stext-102 cl6">
-											Your email address will not be published. Required fields are marked *
+											Your email address will not be published.
 										</p>
 
 										<div class="flex-w flex-m p-t-50 p-b-23">
@@ -323,7 +319,7 @@
 		</span>
 
 		<span class="stext-107 cl6 p-lr-25">
-			Categories: Jacket, Men
+			Categories: {{ implode(', ', simplify_array($data, 'title', 'categories')) }}
 		</span>
 	</div>
 </section>
@@ -341,13 +337,14 @@
 		<!-- Slide2 -->
 		<div class="wrap-slick2">
 			<div class="slick2">
+				@foreach($products as $num=>$prod)
 				<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
 					<!-- Block2 -->
 					<div class="block2">
 						<div class="block2-pic hov-img0">
-							<img src="/images/product-01.jpg" alt="IMG-PRODUCT">
+							<img src="/images/{{ isset($prod->photos[0]) ? $prod->photos[0]->photo:'' }}" alt="IMG-PRODUCT">
 
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
+							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal{{ $num+1 }}">
 								Quick View
 							</a>
 						</div>
@@ -355,11 +352,11 @@
 						<div class="block2-txt flex-w flex-t p-t-14">
 							<div class="block2-txt-child1 flex-col-l ">
 								<a href="/product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Esprit Ruffle Shirt
+									{{ $prod->title }}
 								</a>
 
 								<span class="stext-105 cl3">
-									$16.64
+									${{ $prod->price }}.00
 								</span>
 							</div>
 
@@ -372,230 +369,8 @@
 						</div>
 					</div>
 				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							<img src="/images/product-02.jpg" alt="IMG-PRODUCT">
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-								Quick View
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l ">
-								<a href="/product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Herschel supply
-								</a>
-
-								<span class="stext-105 cl3">
-									$35.31
-								</span>
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="/images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/images/icons/icon-heart-02.png" alt="ICON">
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							<img src="/images/product-03.jpg" alt="IMG-PRODUCT">
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-								Quick View
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l ">
-								<a href="/product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Only Check Trouser
-								</a>
-
-								<span class="stext-105 cl3">
-									$25.50
-								</span>
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="/images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/images/icons/icon-heart-02.png" alt="ICON">
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							<img src="/images/product-04.jpg" alt="IMG-PRODUCT">
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-								Quick View
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l ">
-								<a href="/product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Classic Trench Coat
-								</a>
-
-								<span class="stext-105 cl3">
-									$75.00
-								</span>
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="/images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/images/icons/icon-heart-02.png" alt="ICON">
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							<img src="/images/product-05.jpg" alt="IMG-PRODUCT">
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-								Quick View
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l ">
-								<a href="/product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Front Pocket Jumper
-								</a>
-
-								<span class="stext-105 cl3">
-									$34.75
-								</span>
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="/images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/images/icons/icon-heart-02.png" alt="ICON">
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							<img src="/images/product-06.jpg" alt="IMG-PRODUCT">
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-								Quick View
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l ">
-								<a href="/product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Vintage Inspired Classic 
-								</a>
-
-								<span class="stext-105 cl3">
-									$93.20
-								</span>
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="/images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/images/icons/icon-heart-02.png" alt="ICON">
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							<img src="/images/product-07.jpg" alt="IMG-PRODUCT">
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-								Quick View
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l ">
-								<a href="/product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Shirt in Stretch Cotton
-								</a>
-
-								<span class="stext-105 cl3">
-									$52.66
-								</span>
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="/images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/images/icons/icon-heart-02.png" alt="ICON">
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
-
-				<div class="item-slick2 p-l-15 p-r-15 p-t-15 p-b-15">
-					<!-- Block2 -->
-					<div class="block2">
-						<div class="block2-pic hov-img0">
-							<img src="/images/product-08.jpg" alt="IMG-PRODUCT">
-
-							<a href="#" class="block2-btn flex-c-m stext-103 cl2 size-102 bg0 bor2 hov-btn1 p-lr-15 trans-04 js-show-modal1">
-								Quick View
-							</a>
-						</div>
-
-						<div class="block2-txt flex-w flex-t p-t-14">
-							<div class="block2-txt-child1 flex-col-l ">
-								<a href="/product-detail.html" class="stext-104 cl4 hov-cl1 trans-04 js-name-b2 p-b-6">
-									Pieces Metallic Printed
-								</a>
-
-								<span class="stext-105 cl3">
-									$18.96
-								</span>
-							</div>
-
-							<div class="block2-txt-child2 flex-r p-t-3">
-								<a href="#" class="btn-addwish-b2 dis-block pos-relative js-addwish-b2">
-									<img class="icon-heart1 dis-block trans-04" src="/images/icons/icon-heart-01.png" alt="ICON">
-									<img class="icon-heart2 dis-block trans-04 ab-t-l" src="/images/icons/icon-heart-02.png" alt="ICON">
-								</a>
-							</div>
-						</div>
-					</div>
-				</div>
+				@endforeach
+				<!-- end products -->
 			</div>
 		</div>
 	</div>
@@ -603,12 +378,13 @@
 
 
 <!-- Modal1 -->
-<div class="wrap-modal1 js-modal1 p-t-60 p-b-20">
-	<div class="overlay-modal1 js-hide-modal1"></div>
+@foreach($products as $num=>$prod)
+<div class="wrap-modal1 js-modal{{ $num+1 }} p-t-60 p-b-20">
+	<div class="overlay-modal1 js-hide-modal{{ $num+1 }}"></div>
 
 	<div class="container">
 		<div class="bg0 p-t-60 p-b-30 p-lr-15-lg how-pos3-parent">
-			<button class="how-pos3 hov3 trans-04 js-hide-modal1">
+			<button class="how-pos3 hov3 trans-04 js-hide-modal{{ $num+1 }}">
 				<img src="/images/icons/icon-close.png" alt="CLOSE">
 			</button>
 
@@ -620,35 +396,17 @@
 							<div class="wrap-slick3-arrows flex-sb-m flex-w"></div>
 
 							<div class="slick3 gallery-lb">
-								<div class="item-slick3" data-thumb="images/product-detail-01.jpg">
+							@foreach($prod->photos as $photo)
+								<div class="item-slick3" data-thumb="/images/{{ $photo->photo }}">
 									<div class="wrap-pic-w pos-relative">
-										<img src="/images/product-detail-01.jpg" alt="IMG-PRODUCT">
+										<img src="/images/{{ $photo->photo }}" alt="IMG-PRODUCT">
 
-										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/images/product-detail-01.jpg">
+										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/images/{{ $photo->photo }}">
 											<i class="fa fa-expand"></i>
 										</a>
 									</div>
 								</div>
-
-								<div class="item-slick3" data-thumb="images/product-detail-02.jpg">
-									<div class="wrap-pic-w pos-relative">
-										<img src="/images/product-detail-02.jpg" alt="IMG-PRODUCT">
-
-										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/images/product-detail-02.jpg">
-											<i class="fa fa-expand"></i>
-										</a>
-									</div>
-								</div>
-
-								<div class="item-slick3" data-thumb="images/product-detail-03.jpg">
-									<div class="wrap-pic-w pos-relative">
-										<img src="/images/product-detail-03.jpg" alt="IMG-PRODUCT">
-
-										<a class="flex-c-m size-108 how-pos1 bor0 fs-16 cl10 bg0 hov-btn3 trans-04" href="/images/product-detail-03.jpg">
-											<i class="fa fa-expand"></i>
-										</a>
-									</div>
-								</div>
+								@endforeach
 							</div>
 						</div>
 					</div>
@@ -657,15 +415,15 @@
 				<div class="col-md-6 col-lg-5 p-b-30">
 					<div class="p-r-50 p-t-5 p-lr-0-lg">
 						<h4 class="mtext-105 cl2 js-name-detail p-b-14">
-							Lightweight Jacket
+							{{ $prod->title }}
 						</h4>
 
 						<span class="mtext-106 cl2">
-							$58.79
+							${{ $prod->price }}.00
 						</span>
 
 						<p class="stext-102 cl3 p-t-23">
-							Nulla eget sem vitae eros pharetra viverra. Nam vitae luctus ligula. Mauris consequat ornare feugiat.
+							{{ $prod->intro }}
 						</p>
 						
 						<!--  -->
@@ -679,10 +437,9 @@
 									<div class="rs1-select2 bor8 bg0">
 										<select class="js-select2" name="time">
 											<option>Choose an option</option>
-											<option>Size S</option>
-											<option>Size M</option>
-											<option>Size L</option>
-											<option>Size XL</option>
+											@foreach($prod->sizes as $size)
+											<option>Size {{ $size->size }}</option>
+											@endforeach
 										</select>
 										<div class="dropDownSelect2"></div>
 									</div>
@@ -698,10 +455,9 @@
 									<div class="rs1-select2 bor8 bg0">
 										<select class="js-select2" name="time">
 											<option>Choose an option</option>
-											<option>Red</option>
-											<option>Blue</option>
-											<option>White</option>
-											<option>Grey</option>
+											@foreach($prod->colors as $color)
+											<option>{{ $color->color }}</option>
+											@endforeach
 										</select>
 										<div class="dropDownSelect2"></div>
 									</div>
@@ -755,6 +511,8 @@
 		</div>
 	</div>
 </div>
+@endforeach
+
 
 @stop
 

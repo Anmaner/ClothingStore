@@ -20,7 +20,8 @@ class ShoppingController extends Controller
 	{
 		$data = $product->where('alias', $alias)->first();
 		$categories = $prodCat->all();
+		$products = $product->inRandomOrder()->limit(30)->get();
 
-		return view('shop.product_detail', compact('data', 'categories'));
+		return view('shop.product_detail', compact('data', 'categories', 'products'));
 	}
 }
