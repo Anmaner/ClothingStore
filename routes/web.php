@@ -13,6 +13,7 @@
 
 
 Route::get('/', 'IndexController@index')->name('main');
+Auth::routes();
 
 Route::get('shopping/{category?}', 'ShoppingController@category')->middleware('CorrectCategory:shopping')->name('shopping');
 Route::get('shopping/product/{alias}', 'ShoppingController@product')->name('product');
@@ -29,4 +30,5 @@ Route::group(['prefix' => 'blog-search'], function() {
 Route::get('blog-post/{alias}', 'BlogController@post')->name('post');
 Route::put('blog-comment', 'BlogController@comment')->name('blog.comment');
 
-Auth::routes();
+
+Route::put('newsletter', 'NewsletterController@subscribe')->name('newsletter');

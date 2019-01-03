@@ -15,11 +15,8 @@ class CreateNewslettersTable extends Migration
     {
         Schema::create('newsletters', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('email')->nullable();
-            $table->unsignedInteger('user_id')->nullable();
+            $table->string('email');
             $table->timestamps();
-
-            $table->foreign('user_id')->references('id')->on('users');
         });
     }
 
