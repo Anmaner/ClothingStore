@@ -32,3 +32,6 @@ Route::put('blog-comment', 'BlogController@comment')->name('blog.comment');
 
 
 Route::put('newsletter', 'NewsletterController@subscribe')->name('newsletter');
+
+Route::get('contact', 'ContactController@contact')->name('contact');
+Route::put('contact/send-message', 'ContactController@send')->name('contact.send');
