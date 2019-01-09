@@ -8,10 +8,9 @@ class CartItem
 	private $price;
 	private $amount;
 
-	public function __construct($id, $price, $amount)
+	public function __construct($id, $amount)
 	{
 		$this->id = $id;
-		$this->price = $price;
 		$this->amount = $amount;
 	}
 

@@ -6,6 +6,7 @@ use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use App\UseCases\Cart\Cart;
 use App\Usecases\Cart\Repositories\RepositoryInterface;
+use App\Usecases\Cart\Storages\StorageInterface;
 
 class FakeRepository implements RepositoryInterface
 {
@@ -20,15 +21,34 @@ class FakeRepository implements RepositoryInterface
 	}
 }
 
+class FakeStorage implements StorageInterface
+{
+	private $data;
+
+
+	public function save($data)
+	{
+		$this->data = $data;
+	}
+
+	public function load()
+	{
+		return $this->data ?: [];
+	}
+}
+
 class CartTest extends TestCase
 {
 	public function setUp()
 	{
-		$this->cart = new Cart(new FakeRepository);
+		$this->cart = new Cart(new FakeStorage, new FakeRepository);
 	}
 
     public function testAdd()
     {
+    	$this->cart->add(1);
+
+
     	$this->cart->add(1, 5);
     	$product = $this->cart->get(1);
 
