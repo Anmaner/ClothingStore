@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Usecases\Cart\Repositories;
+namespace App\Usecases\Cart\Storages;
 
 use Session;
 

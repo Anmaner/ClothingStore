@@ -17,6 +17,8 @@ class Cart
 	{
 		$this->repository = $repository;
 		$this->storage = $storage;
+
+		$this->load();
 	}
 
 	public function add($prodId, $size, $color, $amount = 1)
