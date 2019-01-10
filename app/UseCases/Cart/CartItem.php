@@ -7,10 +7,14 @@ class CartItem
 	private $id;
 	private $price;
 	private $amount;
+	private $size;
+	private $color;
 
-	public function __construct($id, $amount)
+	public function __construct($id, $size, $color, $amount)
 	{
 		$this->id = $id;
+		$this->size = $size;
+		$this->color = $color;
 		$this->amount = $amount;
 	}
 
@@ -29,6 +33,17 @@ class CartItem
 		return $this->amount;
 	}
 
+	public function getSize()
+	{
+		return $this->size;
+	}
+
+
+	public function getColor()
+	{
+		return $this->color;
+	}	
+
 	public function getGeneralPrice()
 	{
 		return $this->price * $this->amount;
@@ -37,6 +52,16 @@ class CartItem
 	public function setPrice($price)
 	{
 		$this->price = $price;
+	}
+
+	public function setSize($size)
+	{
+		$this->size = $size;
+	}
+
+	public function setColor($color)
+	{
+		$this->color = $color;
 	}
 
 	public function setAmount($amount)

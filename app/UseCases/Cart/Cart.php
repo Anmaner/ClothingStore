@@ -19,9 +19,9 @@ class Cart
 		$this->storage = $storage;
 	}
 
-	public function add($prodId, $amount = 1)
+	public function add($prodId, $size, $color, $amount = 1)
 	{
-		$this->products[$prodId] = new CartItem($prodId, $amount);
+		$this->products[$prodId] = new CartItem($prodId, $size, $color, $amount);
 
 		$this->save();
 	}
