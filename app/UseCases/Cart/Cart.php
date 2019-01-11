@@ -30,6 +30,8 @@ class Cart
 
 	public function delete($prodId)
 	{
+		$this->productExists($prodId);
+
 		unset($this->products[$prodId]);
 
 		$this->save();
@@ -37,16 +39,14 @@ class Cart
 
 	public function get($prodId)
 	{
-		$this->load();
+		$this->productExists($prodId);
 
-		return $this->products[$prodId];
+		return $this->handleProduct($this->products[$prodId]);
 	}
 
 	public function getAll()
 	{
-		$this->load();
-
-		return $this->products;
+		return $this->handleProducts($this->products);
 	}
 
 	public function clear()
@@ -58,6 +58,7 @@ class Cart
 
 	public function setAmount($prodId, $amount)
 	{
+		$this->productExists($prodId);
 		$this->products[$prodId]->setAmount($amount);
 
 		$this->save();
@@ -65,6 +66,7 @@ class Cart
 
 	public function amountUp($prodId)
 	{
+		$this->productExists($prodId);
 		$this->products[$prodId]->amountUp();
 
 		$this->save();
@@ -72,6 +74,7 @@ class Cart
 
 	public function amountDown($prodId)
 	{
+		$this->productExists($prodId);
 		$this->products[$prodId]->amountDown();
 
 		$this->save();
@@ -79,10 +82,8 @@ class Cart
 
 	public function getGeneralCost()
 	{
-		$this->load();
-
 		$price = 0;
-		foreach($this->products as $product) {
+		foreach($this->handleProducts($this->products) as $product) {
 			$price += $product->getGeneralPrice();
 		}
 
@@ -101,12 +102,25 @@ class Cart
 		$this->products = $this->handleProducts($this->storage->load());
 	}
 
-	protected function handleProducts($products)
+	protected function handleProducts(array $products)
 	{
 		foreach($products as $product) {
-			$product->setPrice($this->repository->getPrice($product->getId()));
+			$this->handleProduct($product);
 		}
 
 		return $products;
+	}
+
+	protected function handleProduct($product)
+	{
+		$product->setPrice($this->repository->getPrice($product->getId()));
+		return $product;
+	}
+
+	protected function productExists($prodId)
+	{
+		if(!isset($this->products[$prodId])) {
+			throw new \Exception("Product not found");
+		}
 	}
 }

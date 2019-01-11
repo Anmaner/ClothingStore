@@ -122,4 +122,10 @@ class CartTest extends TestCase
 
  		$this->assertEquals(70, $this->cart->getGeneralCost());
  	}
+
+    public function testProductExists()
+    {
+        $this->expectExceptionMessage('Product not found');
+        $this->cart->get(1);
+    }
 }
